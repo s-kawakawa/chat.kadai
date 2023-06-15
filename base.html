@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase_version9_RealtimeDB(G'sACADEMY初学者用サンプル)</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+
+    <!-- コンテンツ表示画面 -->
+    <div id="time"><input type="date" id="date" value="2023-06-01"><input type="time" id="time" value=""></div></div>
+    <div>
+        <div>
+            名前：<input type="text" id="uname">
+        </div>
+
+        <div>
+            <textarea id="text" cols="30" rows="10"></textarea>
+            <button id="send">送信</button>
+        </div>
+        <div id="output" style="overflow: auto;height: 300px;"></div>
+
+
+    <ul class="ul_btn">
+    <li id="delete">削除する</li>
+
+</ul>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+            from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCY_bvw2DjVCaptS7lc5-0tdgj2QXvuxb8",
+            authDomain: "gsdev0603-648eb.firebaseapp.com",
+            projectId: "gsdev0603-648eb",
+            storageBucket: "gsdev0603-648eb.appspot.com",
+            messagingSenderId: "134000728130",
+            appId: "1:134000728130:web:3f848e33d9f8d3d43535db"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app); //RealtimeDBに接続
+        const dbRef = ref(db, "chat"); //RealtimeDB内の"chat"を使う
+
+        //データ登録(Click)
+        $("#send").on("click",function(){
+           const name =$("#uname").val();
+           const text = $("#text").val();
+           const time = $("#time").val();
+
+            const msg = {
+             uname : $("#uname").val(),
+             text : $("#text").val(),
+             time : $("#time").val()
+            }
+            const newPostRef = push(dbRef);
+            set(newPostRef,msg);
+        })
+
+
+        //データ登録(Enter)
+
+        //最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
+        onChildAdded(dbRef,function(date){
+        const msg = date.val();
+        const key = date.key;
+
+     // let h = "<p>";
+     // h += msg.uname;
+     // h += "<br>";
+     // h += msg.text;
+     // h += "</p>";    
+
+        let h = `
+        <h1>
+          <p class="uname">${msg.uname}</p>
+          <p class="text">${msg.text}</p>
+          <p class="time">${msg.time}</p>
+        </h1>
+        `
+
+
+        $("#output").append(h);
+        const text = $("#text").val("");
+
+        //ここから削除の動き
+
+        $("#delete").on("click",function(){
+        remove(dbRef);
+        }
+        );
+        
+        onChildRemoved(dbRef, function(){
+            $(".uname").remove();
+            $(".text").remove();
+            alert("削除しました");
+        });
+
+
+
+    });
+</script>
+</body>
+
+</html>
