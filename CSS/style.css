@@ -1,0 +1,41 @@
+.h1:nth-child(odd){
+    background-color: aqua;
+    font-size: 12px;
+}
+
+#delete{
+    list-style-type:none;
+    border: 1px solid white;
+    background-color: #B7B5AA;
+    display:table-cell;  /* 定義 */
+    cursor: pointer;
+    color: white;
+    width: 300px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+#output{
+    width: 300px;
+    height: 400px;
+    overflow: scroll;
+    background-color: #F0F0EE;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+h1:nth-child(odd){
+    background-color: beige;
+    font-size: 18px;
+    width: 50%;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+h1:nth-child(even){
+    text-align: right;
+    background-color: chocolate;
+    font-size: 18px;
+    width: 50%;
+ }
